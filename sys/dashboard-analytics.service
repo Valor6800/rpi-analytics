@@ -1,0 +1,15 @@
+[Unit]
+Description=6800 Dashboard Analytics
+
+[Service]
+Environment="BABEL_DISABLE_CACHE=1"
+ExecStart=/home/pi/dashboard-analytics/sys/runme.sh
+Restart=always
+User=nobody
+Group=nogroup
+Environment=PATH=/usr/bin:/usr/local/bin
+Environment=NODE_ENV=production
+WorkingDirectory=/home/pi/dashboard-analytics/
+
+[Install]
+WantedBy=multi-user.target
