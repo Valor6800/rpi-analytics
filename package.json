@@ -1,0 +1,20 @@
+{
+  "name": "dashboard-analytics",
+  "version": "1.0.0",
+  "description": "",
+  "main": "app.js",
+  "scripts": {
+    "install": "pip3 install --user pynetworktables2js",
+    "start": "python3 -m pynetworktables2js --team 6800"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/Valor6800/dashboard-analytics.git"
+  },
+  "author": "mray190",
+  "license": "Apache-2.0",
+  "bugs": {
+    "url": "https://github.com/Valor6800/dashboard-analytics/issues"
+  },
+  "homepage": "https://github.com/Valor6800/dashboard-analytics#readme"
+}
