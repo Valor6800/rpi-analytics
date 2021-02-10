@@ -1,0 +1,10 @@
+[Unit]
+Description=6800 Dashboard Analytics
+
+[Service]
+ExecStart=/home/pi/rpi-analytics/dashboard/runme.sh
+Restart=always
+WorkingDirectory=/home/pi/rpi-analytics/dashboard/
+
+[Install]
+WantedBy=multi-user.target

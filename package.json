@@ -1,20 +1,20 @@
 {
-  "name": "dashboard-analytics",
+  "name": "rpi-analytics",
   "version": "1.0.0",
   "description": "",
   "main": "app.js",
   "scripts": {
     "install": "pip3 install --user pynetworktables2js",
-    "start": "python3 -m pynetworktables2js --team 6800 -p 8080"
+    "setup": "sudo ./setup.sh"
   },
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/Valor6800/dashboard-analytics.git"
+    "url": "git+https://github.com/Valor6800/rpi-analytics.git"
   },
   "author": "mray190",
   "license": "Apache-2.0",
   "bugs": {
-    "url": "https://github.com/Valor6800/dashboard-analytics/issues"
+    "url": "https://github.com/Valor6800/rpi-analytics/issues"
   },
-  "homepage": "https://github.com/Valor6800/dashboard-analytics#readme"
+  "homepage": "https://github.com/Valor6800/rpi-analytics#readme"
 }
