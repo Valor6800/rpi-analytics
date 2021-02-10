@@ -1,10 +1,10 @@
 # FRC6800 RasperryPi Analytics Platform
 
-This repository is intended to run inside a raspberry pi connected to an FRC robot. It will allow users to see a dashboard full of analytics, as well as control LEDs on the robot to reflect robot state.
+This repository is intended to run inside a raspberry pi connected to an FRC robot. It will allow users to see an analytics dashboard, as well as control LEDs on the robot to reflect robot state.
 
 ## Wiring Setup
 
-The raspberry pi needs to have a 5V 2A power source. Therefore cut a micro USB cable and put ferrule connectors onto the end of the cable you just cut. The micro USB cable needs to be plugged into the VRM on the robot, and make sure it is the 5V 2A rail.
+The raspberry pi needs to have a 5V 2A power source. The simplest way is to cut a micro USB cable and put ferrule connectors onto the end of the cable you just cut. The micro USB cable needs to be plugged into 5V 2A rail of the VRM on the robot.
 
 The LEDs we used are the following LEDs: [WS28122 NeoPixel](https://www.amazon.com/ALITOVE-Individually-Addressable-Programmable-Waterproof/dp/B019DYZNU0/ref=sr_1_1?dchild=1&keywords=WS281x+NeoPixel&qid=1612985168&sr=8-1).
 
@@ -48,7 +48,7 @@ From the `/home/pi/rpi-analytics` directory, run the following:
 
 Both the dashboard and the led controller run by default when the raspberry pi boots up!
 
-To see the dashboard, go to [http://10.68.0.9:8080](http://10.68.0.9:8080) while connected to the robot where `10.68.0.9` is the static IP address of the raspberry pi. See below on how to setup static IP address on the raspberry pi. 
+To see the dashboard, go to [http://10.68.0.9:8080](http://10.68.0.9:8080) while connected to the robot where `10.68.0.9` is the static IP address of the raspberry pi. See below on how to setup static IP address on the raspberry pi. You will need to configure the static IP to match your robot network in order to access the dashboard once the pi is connected to your robot.
 
 ## Debugging
 
@@ -77,9 +77,14 @@ static routers=10.XX.YY.1
 A few notes:
 * Verify that those lines are *un-commented* so they are put into effect.
 * XXYY is your team number. Ex: XX is 68 and YY is 00 for our team, 6800.
-* ZZ is an arbitrary number, which Valor chooses 9. This number cannot collide with the roborio (2) and other limelights (ours are 11 and 12)
+* ZZ is an arbitrary number, which Valor chooses 9. This number cannot collide with the roborio (2) and other limelights
+* We recommend using 10.XX.YY.5-10 to avoid collisions with the DHCP scope of the robot network
 
-Reboot your pi with:
+Reserved IP's for reference
+* Default gateway/robot radio: 10.XX.YY.1
+* roboRIO: 10.XX.YY.2
+
+Reboot your pi to set the static IP with:
 ```
 sudo reboot
 ```
