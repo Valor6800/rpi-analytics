@@ -30,17 +30,17 @@
 			<p class="w3-opacity"><b>Red Alliance</b></p>
 			<table id="table_red" class="w3-table"></table>
 
-			<p class="w3-opacity"><b>Red Controls</b></p>
+			<p class="w3-opacity"><b>Red Cargo</b></p>
 			<div class="w3-row">
 				<div class="w3-container w3-quarter">Auto</div>
 				<button id="ball_dec_auto_red" class="w3-button w3-round w3-red w3-quarter" onclick="clicked('red', 'auto', -1);">-</button>
-				<input id="red_auto_cargo" class="w3-input w3-border w3-round w3-quarter" type="number" onchange="cargoChanged('red', 'auto');">
+				<input id="red_auto_cargo" class="w3-input w3-border w3-round w3-quarter w3-center" type="number" onchange="cargoChanged('red', 'auto', this);">
 				<button id="ball_inc_auto_red" class="w3-button w3-round w3-red w3-quarter" onclick="clicked('red', 'auto', 1);">+</button>
 			</div>
 			<div class="w3-row">
 				<div class="w3-container w3-quarter">Teleop</div>
 				<button id="ball_dec_teleop_red" class="w3-button w3-round w3-red w3-quarter" onclick="clicked('red', 'teleop', -1);">-</button>
-				<input id="red_teleop_cargo" class="w3-input w3-border w3-round w3-quarter" type="number" onchange="cargoChanged('red', 'teleop');">
+				<input id="red_teleop_cargo" class="w3-input w3-border w3-round w3-quarter w3-center" type="number" onchange="cargoChanged('red', 'teleop', this);">
 				<button id="ball_inc_teleop_red" class="w3-button w3-round w3-red w3-quarter" onclick="clicked('red', 'teleop', 1);">+</button>
 			</div>
 
@@ -51,17 +51,17 @@
 			<p class="w3-opacity"><b>Blue Alliance</b></p>
 			<table id="table_blue" class="w3-table"></table>
 
-			<p class="w3-opacity"><b>Blue Controls</b></p>
+			<p class="w3-opacity"><b>Blue Cargo</b></p>
 			<div class="w3-row">
 				<div class="w3-container w3-quarter">Auto</div>
 				<button id="ball_dec_auto_blue" class="w3-button w3-round w3-blue w3-quarter" onclick="clicked('blue', 'auto', -1);">-</button>
-				<input id="blue_auto_cargo" class="w3-input w3-border w3-round w3-quarter" type="number" onchange="cargoChanged('blue', 'auto');">
+				<input id="blue_auto_cargo" class="w3-input w3-border w3-round w3-quarter w3-center" type="number" onchange="cargoChanged('blue', 'auto', this);">
 				<button id="ball_inc_auto_blue" class="w3-button w3-round w3-blue w3-quarter" onclick="clicked('blue', 'auto', 1);">+</button>
 			</div>
 			<div class="w3-row">
 				<div class="w3-container w3-quarter">Teleop</div>
 				<button id="ball_dec_teleop_blue" class="w3-button w3-round w3-blue w3-quarter" onclick="clicked('blue', 'teleop', -1);">-</button>
-				<input id="blue_teleop_cargo" class="w3-input w3-border w3-round w3-quarter" type="number" onchange="cargoChanged('blue', 'teleop');">
+				<input id="blue_teleop_cargo" class="w3-input w3-border w3-round w3-quarter w3-center" type="number" onchange="cargoChanged('blue', 'teleop', this);">
 				<button id="ball_inc_teleop_blue" class="w3-button w3-round w3-blue w3-quarter" onclick="clicked('blue', 'teleop', 1);">+</button>
 			</div>
 
@@ -75,9 +75,9 @@
 		<div class="w3-container">
 
 			<p class="w3-opacity"><b>Controls</b></p>
-			<button id="set_mode_auto" class="w3-button w3-block w3-round w3-yellow" onclick="setState('auto');">Auto</button>
-			<button id="set_mode_teleop" class="w3-button w3-block w3-round w3-white w3-border" onclick="setState('teleop');">Teleop</button>
-			<button id="clear_count" class="w3-button w3-block w3-round w3-black" onclick="setState('none');">Clear</button>
+			<p><button id="set_mode_auto" class="w3-button w3-block w3-round w3-yellow" onclick="setState('auto');">Auto</button></p>
+			<p><button id="set_mode_teleop" class="w3-button w3-block w3-round w3-white w3-border" onclick="setState('teleop');">Teleop</button></p>
+			<p><button id="clear_count" class="w3-button w3-block w3-round w3-black" onclick="reset_state();">Clear</button></p>
 
 		</div>
 	</div>
@@ -125,7 +125,6 @@
 				curr_cell = row_content.insertCell(-1);
 				curr_cell.className = "w3-green";
 			}
-
 		}
 	}
 
@@ -171,7 +170,7 @@
 				if (j == 14) {
 					if (state.mode == 'none') {
 						curr_table.rows[1].cells[j-1].className = 'w3-green';
-					} else if (state.mode == 'auto' && state[color].auto >= 5) {
+					} else if (state[color].auto >= 5) {
 						state[color].quintet = true;
 						curr_table.rows[1].cells[j-1].className = 'w3-pale-' + color;
 					} else if (!state[color].quintet) {
@@ -186,14 +185,15 @@
 				}
 			}
 		}
-		document.getElementById('red_auto_cargo').innerHTML = state.red.auto;
-		document.getElementById('red_teleop_cargo').innerHTML = state.red.teleop;
-		document.getElementById('blue_auto_cargo').innerHTML = state.blue.auto;
-		document.getElementById('blue_teleop_cargo').innerHTML = state.blue.teleop;
+		document.getElementById('red_auto_cargo').value = state.red.auto;
+		document.getElementById('red_teleop_cargo').value = state.red.teleop;
+		document.getElementById('blue_auto_cargo').value = state.blue.auto;
+		document.getElementById('blue_teleop_cargo').value = state.blue.teleop;
 	}
 
 	function clicked(color, mode, value)
 	{
+		state.mode = mode;
 		state[color][mode] += value;
 		render();
 	}
@@ -204,12 +204,16 @@
 		render();
 	}
 
-	function cargoChanged(color, mode)
+	function cargoChanged(color, mode, ctx)
 	{
-
+		state.mode = mode;
+		state[color][mode] = parseInt(ctx.value);
+		render();
 	}
 
 	setup();
+	render();
+
 </script>
 
 </html>
