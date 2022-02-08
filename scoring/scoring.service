@@ -1,0 +1,10 @@
+[Unit]
+Description=6800 Scoring Dashboard
+
+[Service]
+ExecStart=/home/pi/rpi-analytics/scoring/runme.sh
+Restart=always
+WorkingDirectory=/home/pi/rpi-analytics/scoring/
+
+[Install]
+WantedBy=multi-user.target

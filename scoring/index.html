@@ -1,0 +1,215 @@
+<html>
+<head>
+	<title>2022 Valor Scoring</title>
+	<link rel="stylesheet" href="dist/w3.css">
+	<style>
+
+		body {
+			background-color: #444444;
+			color: #ffffff;
+		}
+
+		td {
+			border:  1px solid black;
+		}
+	</style>
+</head>
+
+<body>
+
+	<div class="w3-bar w3-center">
+		<h1>Valor 6800 - Driver Station LEDs</h1>
+	</div>
+
+	<hr>
+
+	<div class="w3-row">
+
+		<div class="w3-half w3-container">
+
+			<p class="w3-opacity"><b>Red Alliance</b></p>
+			<table id="table_red" class="w3-table"></table>
+
+			<p class="w3-opacity"><b>Red Controls</b></p>
+			<div class="w3-row">
+				<div class="w3-container w3-quarter">Auto</div>
+				<button id="ball_dec_auto_red" class="w3-button w3-round w3-red w3-quarter" onclick="clicked('red', 'auto', -1);">-</button>
+				<input id="red_auto_cargo" class="w3-input w3-border w3-round w3-quarter" type="number" onchange="cargoChanged('red', 'auto');">
+				<button id="ball_inc_auto_red" class="w3-button w3-round w3-red w3-quarter" onclick="clicked('red', 'auto', 1);">+</button>
+			</div>
+			<div class="w3-row">
+				<div class="w3-container w3-quarter">Teleop</div>
+				<button id="ball_dec_teleop_red" class="w3-button w3-round w3-red w3-quarter" onclick="clicked('red', 'teleop', -1);">-</button>
+				<input id="red_teleop_cargo" class="w3-input w3-border w3-round w3-quarter" type="number" onchange="cargoChanged('red', 'teleop');">
+				<button id="ball_inc_teleop_red" class="w3-button w3-round w3-red w3-quarter" onclick="clicked('red', 'teleop', 1);">+</button>
+			</div>
+
+		</div>
+
+		<div class="w3-half w3-container">
+
+			<p class="w3-opacity"><b>Blue Alliance</b></p>
+			<table id="table_blue" class="w3-table"></table>
+
+			<p class="w3-opacity"><b>Blue Controls</b></p>
+			<div class="w3-row">
+				<div class="w3-container w3-quarter">Auto</div>
+				<button id="ball_dec_auto_blue" class="w3-button w3-round w3-blue w3-quarter" onclick="clicked('blue', 'auto', -1);">-</button>
+				<input id="blue_auto_cargo" class="w3-input w3-border w3-round w3-quarter" type="number" onchange="cargoChanged('blue', 'auto');">
+				<button id="ball_inc_auto_blue" class="w3-button w3-round w3-blue w3-quarter" onclick="clicked('blue', 'auto', 1);">+</button>
+			</div>
+			<div class="w3-row">
+				<div class="w3-container w3-quarter">Teleop</div>
+				<button id="ball_dec_teleop_blue" class="w3-button w3-round w3-blue w3-quarter" onclick="clicked('blue', 'teleop', -1);">-</button>
+				<input id="blue_teleop_cargo" class="w3-input w3-border w3-round w3-quarter" type="number" onchange="cargoChanged('blue', 'teleop');">
+				<button id="ball_inc_teleop_blue" class="w3-button w3-round w3-blue w3-quarter" onclick="clicked('blue', 'teleop', 1);">+</button>
+			</div>
+
+		</div>
+	</div>
+
+	<hr>
+
+	<div class="w3-row">
+
+		<div class="w3-container">
+
+			<p class="w3-opacity"><b>Controls</b></p>
+			<button id="set_mode_auto" class="w3-button w3-block w3-round w3-yellow" onclick="setState('auto');">Auto</button>
+			<button id="set_mode_teleop" class="w3-button w3-block w3-round w3-white w3-border" onclick="setState('teleop');">Teleop</button>
+			<button id="clear_count" class="w3-button w3-block w3-round w3-black" onclick="setState('none');">Clear</button>
+
+		</div>
+	</div>
+
+</body>
+
+<script>
+
+	let state = {
+		mode: 'none',
+		blue: {
+			auto: 0,
+			teleop: 0,
+			quintet: false
+		},
+		red: {
+			auto: 0,
+			teleop: 0,
+			quintet: false
+		}
+	}
+	let tables = ['table_red', 'table_blue'];
+
+	function reset_state()
+	{
+		state.mode = 'none';
+		state.blue.auto = 0;
+		state.blue.teleop = 0;
+		state.red.auto = 0;
+		state.red.teleop = 0;
+		state.red.quintet = false;
+		state.blue.quintet = false;
+		render();
+	}
+
+	function setup()
+	{
+		for (let i = 0; i < tables.length; i++) {
+			let curr_table = document.getElementById(tables[i]);
+			let row_title = curr_table.insertRow(-1);
+			let row_content = curr_table.insertRow(-1);
+			for (let j = 1; j <= 17; j++) {
+				let curr_cell = row_title.insertCell(-1);
+				curr_cell.innerHTML = j;
+				curr_cell = row_content.insertCell(-1);
+				curr_cell.className = "w3-green";
+			}
+
+		}
+	}
+
+	function render()
+	{
+		for (let i = 0; i < tables.length; i++) {
+			let curr_table = document.getElementById(tables[i]);
+			let color = tables[i].replace('table_','');
+			for (let j = 1; j <= 17; j++) {
+
+				// Auto/Teleop decider
+				if ((j >=1 && j <= 4) || (j >= 15)) {
+
+					if ((state[color].teleop + state[color].auto) >= 20 ||
+						((state[color].teleop + state[color].auto) >= 18 && state[color].quintet)) {
+						curr_table.rows[1].cells[j-1].className = 'w3-pale-' + color;
+					} else if (state.mode == 'auto') {
+						curr_table.rows[1].cells[j-1].className = 'w3-yellow';
+
+					} else if (state.mode == 'teleop') {
+						curr_table.rows[1].cells[j-1].className = 'w3-white';
+
+					} else if (state.mode == 'none') {
+						curr_table.rows[1].cells[j-1].className = 'w3-green';
+					}
+				}
+
+				if (j >= 5 && j <= 13) {
+					if (state.mode == 'none') {
+						curr_table.rows[1].cells[j-1].className = 'w3-green';
+					} else {
+
+						if ((state[color].auto + state[color].teleop) == ((j - 5) * 2) + 1) {
+							curr_table.rows[1].cells[j-1].className = 'w3-' + color;
+						} else if ((state[color].auto + state[color].teleop) > ((j - 5) * 2) + 1) {
+							curr_table.rows[1].cells[j-1].className = 'w3-pale-' + color;
+						} else {
+							curr_table.rows[1].cells[j-1].className = 'w3-black';
+						}
+					}
+				}
+
+				if (j == 14) {
+					if (state.mode == 'none') {
+						curr_table.rows[1].cells[j-1].className = 'w3-green';
+					} else if (state.mode == 'auto' && state[color].auto >= 5) {
+						state[color].quintet = true;
+						curr_table.rows[1].cells[j-1].className = 'w3-pale-' + color;
+					} else if (!state[color].quintet) {
+						if ((state[color].auto + state[color].teleop) == ((j - 5) * 2) + 1) {
+							curr_table.rows[1].cells[j-1].className = 'w3-' + color;
+						} else if ((state[color].auto + state[color].teleop) > ((j - 5) * 2) + 1) {
+							curr_table.rows[1].cells[j-1].className = 'w3-pale-' + color;
+						} else {
+							curr_table.rows[1].cells[j-1].className = 'w3-black';
+						}
+					}
+				}
+			}
+		}
+		document.getElementById('red_auto_cargo').innerHTML = state.red.auto;
+		document.getElementById('red_teleop_cargo').innerHTML = state.red.teleop;
+		document.getElementById('blue_auto_cargo').innerHTML = state.blue.auto;
+		document.getElementById('blue_teleop_cargo').innerHTML = state.blue.teleop;
+	}
+
+	function clicked(color, mode, value)
+	{
+		state[color][mode] += value;
+		render();
+	}
+
+	function setState(mode)
+	{
+		state.mode = mode;
+		render();
+	}
+
+	function cargoChanged(color, mode)
+	{
+
+	}
+
+	setup();
+</script>
+
+</html>
